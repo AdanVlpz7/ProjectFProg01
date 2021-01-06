@@ -95,12 +95,10 @@ int compareChar(char word[15],char answer[15]){
     int varBool = 0;
     int varCheck = 0;
     for(int i = 0; word[i]!='\0';i++){
-        //size++;
+        size++;
     }
-    for(int i = 0; i <= size; i++){
-        if(word[i] == answer[i]){
-            varBool = 1;
-        }
+    for(int i = 0; i < size; i++){
+        varBool += strcmp(word,answer);
     }
     //if(varCheck == size){
       //  varBool = 1;//si son iguales
@@ -137,6 +135,7 @@ int main(){
         indexArr = (int)rand() % 15;
         printf(" * La palabra es mas o menos asi: \n");
         ans = 0;
+        mistakes = 0;
         for(int i = 0; words[indexArr][i]!='\0'; i++)
         {
             //printf("_ ");
@@ -152,15 +151,25 @@ int main(){
 
         //para checar la palabra
         printCorrectAns(answTemp);
-                                //comparacion de cadenas recurrente
-        if (!(strcmp(wordTemp,answTemp))){
+        
+        //comparacion de cadenas recurrente
+        if (compareChar(wordTemp,answTemp) == 0){
             printf("\n Felicidades, te salvaste... por ahora.\n");
             printf("\n ¿Quieres volver a jugar?(s/n)?");
-            scanf("%d",gameOn);
+            scanf("%c",&gameOn);
             if(gameOn == 's'){
                 srand((unsigned int)time(NULL));
                 indexArr = (int)rand() % 15;
+                printf(" * La palabra es mas o menos asi: \n");
+                ans = 0;
                 mistakes = 0;
+                for(int i = 0; words[indexArr][i]!='\0'; i++){
+                    //printf("_ ");
+                    answTemp[i] = 'x';
+                    wordTemp[i] = words[indexArr][i];
+                    printf("%c",wordTemp[i]);
+                    //funcion para imprimir answTemp como ("_ ")
+                }
             }
         }
 
@@ -192,10 +201,20 @@ int main(){
             //G A M E   O V E R
             printf("\n\n¿Quieres volver a jugar?(s/n)\n");
             scanf("%c",&gameOn);
+            //getch();
             if(gameOn == 's'){
                 srand((unsigned int)time(NULL));
                 indexArr = (int)rand() % 15;
+                printf(" * La palabra es mas o menos asi: \n");
+                ans = 0;
                 mistakes = 0;
+                for(int i = 0; words[indexArr][i]!='\0'; i++){
+                    //printf("_ ");
+                    answTemp[i] = 'x';
+                    wordTemp[i] = words[indexArr][i];
+                    printf("%c",wordTemp[i]);
+                    //funcion para imprimir answTemp como ("_ ")
+                }
             }
         }
     };
