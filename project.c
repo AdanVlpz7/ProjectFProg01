@@ -1,6 +1,7 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 //#include <conio.h> ONLY WINDOWS
 
 char getch(){
@@ -47,62 +48,68 @@ int checkAnswer(char c, char word[15]){
         //printf("no esta la letra");
         varBool = 0;
     }
-    return varBool;
-}
-
-char updateChar(char c, char word[15], char answer[15]){
-    char updChar[15];
-    for(int i = 0; word[i]!= '\0'; i++){
-        if (c == word[i] && answer[i] == 'x'){
-            updChar[i] = c;
-            return updChar[i];
-        }
-    }
-}
-
-int updateChecking(char original[15],char answer[15]){
-    int varBool;
-    char template[15];
-    for(int i = 0; answer[i]!= '\0'; i++){
-        if ((answer[i] >= 65  && answer[i] <= 90) || (answer[i] >= 97  && answer[i] <= 122))
-        {
-            template[i] = answer[i];
-            printf("%c ",template[i]);
-        }
-        else{
-            printf("%c ", answer[i]);
-        }
-    }
     
     return varBool;
 }
-void printCorrectAns(char c, char word[15], char wrong){
-    char arr[15];
+
+//quiero que busques c en word y lo remplaces en answer sin quitar las x
+char updateChar(char word[15], char answer[15],char rep){
+    
+    for(int i = 0; answer[i] != '\0'; i++){
+        if (word[i] == rep){
+            //printf("\n si es %c en: ",rep);
+            //printf("%d",i);
+            answer[i] = rep;
+            //return answer[15];
+        }
+
+        //if(answer[i]!='x')
+        //break;
+            //answer[i] = 'x';
+    }
+    return answer[15];
+}
+
+void printCorrectAns(char word[15]){
     for(int i = 0; word[i]!= '\0'; i++)
     {
+        
         //look for the character
-        if (c == word[i])
+        if (word[i] == 'x')
         {
-            arr[i] = c;
+            
+            printf("_ ");
             //updateChecking(word,arr);
         }
-        else 
+        else
         {
-            arr[i] = 00;
+            printf("%c",word[i]);
         } 
+        
         //updateChecking(word,arr);
-    }
-    
-    for(int i = 0; arr[i]!= '\0'; i++)
-    {
-        if (arr[i]!= '0') 
-            printf("%c", arr[i]);
-        if(arr[i] == '0') 
-            printf("_ ");
     }
 }
 
-
+int compareChar(char word[15],char answer[15]){
+    int size = 0;
+    int varBool = 0;
+    int varCheck = 0;
+    for(int i = 0; word[i]!='\0';i++){
+        //size++;
+    }
+    for(int i = 0; i <= size; i++){
+        if(word[i] == answer[i]){
+            varBool = 1;
+        }
+    }
+    //if(varCheck == size){
+      //  varBool = 1;//si son iguales
+    //}
+    //else
+      //  varBool = 0; //no son iguales aun
+    return varBool;
+}
+//ACTUALIZAR-COMPARAR -> IMPRIMIR
 int main(){
 
     char words[15][15] = {"coronavirus","mazatlan","relampago","relojeria","delantero",
@@ -130,45 +137,57 @@ int main(){
         indexArr = (int)rand() % 15;
         printf(" * La palabra es mas o menos asi: \n");
         ans = 0;
+        for(int i = 0; words[indexArr][i]!='\0'; i++)
+        {
+            //printf("_ ");
+            answTemp[i] = 'x';
+            wordTemp[i] = words[indexArr][i];
+            printf("%c",wordTemp[i]);
+            //funcion para imprimir answTemp como ("_ ")
+        }
     }
     while(gameOn == 's'){
         //Funcionamiento del juego
 
-        for(int i = 0; words[indexArr][i]!='\0'; i++)
-        {
-            printf("_ ");
-            answTemp[i] = 'x';
-            wordTemp[i] = words[indexArr][i];
-        }
 
         //para checar la palabra
-        for(int i = 0; wordTemp[i]!='\0'; i++){
-            printf(" '%c' ", wordTemp[i]);
+        printCorrectAns(answTemp);
+                                //comparacion de cadenas recurrente
+        if (!(strcmp(wordTemp,answTemp))){
+            printf("\n Felicidades, te salvaste... por ahora.\n");
+            printf("\n ¿Quieres volver a jugar?(s/n)?");
+            scanf("%d",gameOn);
+            if(gameOn == 's'){
+                srand((unsigned int)time(NULL));
+                indexArr = (int)rand() % 15;
+                mistakes = 0;
+            }
         }
 
         printf("\n¿Cual letra crees que es parte de la palabra?\n");
         scanf("%c",&ans);
-            //printf("\n Confirma que crees que %c es una respuesta con cualquier tecla \n",ans);
-            //getch();
-        //WORKBENCH
+
         if(mistakes < 10){
             int check;
             scanf("%c",&ans);
             check = checkAnswer(ans,wordTemp);
-            if(check == 0 && ans!= '\0'){
+            updateChar(wordTemp,answTemp,ans);
+            if(check == 0){
                     mistakes++;
                     //printf("'%c'",ans);
                     printf("\n Errores : %d \n",mistakes);
             }
             else{
-                printf("\n Errores : %d \n",mistakes);
-            }
-            for(int i = 0; answTemp[i]!= '\0';i++){ 
-                //answTemp[i] = updateChar(ans,wordTemp,answTemp);
-                //printf("%c",answTemp[i]);
-            }            
-        }
+                //ACTUALIZAR TEMPLATE
+                //for(int i = 0; wordTemp[i]!= '\0';i++){
+                //fgets(answTemp,15,stdin);
+                //updateChar(wordTemp,answTemp,ans);
+                
 
+                printf("\n Errores : %d \n",mistakes);
+            
+            }           
+        }
         if (mistakes == 10){
             //G A M E   O V E R
             printf("\n\n¿Quieres volver a jugar?(s/n)\n");
