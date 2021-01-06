@@ -71,7 +71,7 @@ char updateChar(char word[15], char answer[15],char rep){
 }
 
 void printCorrectAns(char word[15]){
-    for(int i = 0; word[i]!= '\0'; i++)
+    for(int i = 0; word[i] >= 97 && word[i] <= 122; i++)
     {
         
         //look for the character
@@ -94,17 +94,18 @@ int compareChar(char word[15],char answer[15]){
     int size = 0;
     int varBool = 0;
     int varCheck = 0;
-    for(int i = 0; word[i]!='\0';i++){
+    for(int i = 0; answer[i] >= 97 && answer[i] <= 122;i++){
         size++;
     }
     for(int i = 0; i < size; i++){
-        varBool += strcmp(word,answer);
-    }
-    //if(varCheck == size){
-      //  varBool = 1;//si son iguales
-    //}
-    //else
-      //  varBool = 0; //no son iguales aun
+        if(word[i] == answer[i])
+            varCheck++;
+        if(varCheck == size){
+            varBool = 0;//si son iguales
+        }
+        else
+            varBool = 1; //no son iguales aun            
+        }
     return varBool;
 }
 //ACTUALIZAR-COMPARAR -> IMPRIMIR
@@ -121,15 +122,17 @@ int main(){
     int mistakes = 0;
     int answer; //bool que simboliza si la respuesta fue correcta o incorrecta 
     int indexArr = 0;
+
     //Introducción al juego
     printf("!Bienvenido al juego tradicional de Ahorcado!");
     printf("\n **** Nota: \n"
                "Se elegira una palabra al azar, dicha palabra estara incompleta \n"
                "y necesitara que adivines que letras faltan, si no, !te ahogaras!\n"
                "...y dicen que es una muerte dolorosa ****\n"
-               "TIENES 10 INTENTOS\n");
+               "TIENES 6 INTENTOS\n");
     printf("Listo? (s/n) \n");
     scanf("%c",&gameOn);
+    
     if(gameOn == 's'){
         srand((unsigned int)time(NULL));
         indexArr = (int)rand() % 15;
@@ -141,7 +144,7 @@ int main(){
             //printf("_ ");
             answTemp[i] = 'x';
             wordTemp[i] = words[indexArr][i];
-            printf("%c",wordTemp[i]);
+            //printf("%c",wordTemp[i]); //palabra a adivinar
             //funcion para imprimir answTemp como ("_ ")
         }
     }
@@ -154,50 +157,29 @@ int main(){
         
         //comparacion de cadenas recurrente
         if (compareChar(wordTemp,answTemp) == 0){
+            
             printf("\n Felicidades, te salvaste... por ahora.\n");
-            printf("\n ¿Quieres volver a jugar?(s/n)?");
-            scanf("%c",&gameOn);
-            if(gameOn == 's'){
-                srand((unsigned int)time(NULL));
-                indexArr = (int)rand() % 15;
-                printf(" * La palabra es mas o menos asi: \n");
-                ans = 0;
-                mistakes = 0;
-                for(int i = 0; words[indexArr][i]!='\0'; i++){
-                    //printf("_ ");
-                    answTemp[i] = 'x';
-                    wordTemp[i] = words[indexArr][i];
-                    printf("%c",wordTemp[i]);
-                    //funcion para imprimir answTemp como ("_ ")
-                }
-            }
+            mistakes = 6; //para ir al game over            
         }
 
         printf("\n¿Cual letra crees que es parte de la palabra?\n");
         scanf("%c",&ans);
 
-        if(mistakes < 10){
+        if(mistakes < 6){
             int check;
             scanf("%c",&ans);
             check = checkAnswer(ans,wordTemp);
             updateChar(wordTemp,answTemp,ans);
+            
             if(check == 0){
                     mistakes++;
                     //printf("'%c'",ans);
                     printf("\n Errores : %d \n",mistakes);
             }
-            else{
-                //ACTUALIZAR TEMPLATE
-                //for(int i = 0; wordTemp[i]!= '\0';i++){
-                //fgets(answTemp,15,stdin);
-                //updateChar(wordTemp,answTemp,ans);
-                
-
-                printf("\n Errores : %d \n",mistakes);
-            
-            }           
+            else                
+                printf("\n Errores : %d \n",mistakes);        
         }
-        if (mistakes == 10){
+        if (mistakes == 6){
             //G A M E   O V E R
             printf("\n\n¿Quieres volver a jugar?(s/n)\n");
             scanf("%c",&gameOn);
@@ -212,12 +194,11 @@ int main(){
                     //printf("_ ");
                     answTemp[i] = 'x';
                     wordTemp[i] = words[indexArr][i];
-                    printf("%c",wordTemp[i]);
-                    //funcion para imprimir answTemp como ("_ ")
+                    //printf("%c",wordTemp[i]); //palabra a adivinar
+                    
                 }
             }
         }
-    };
-    
+    }
     return 0;
 }
