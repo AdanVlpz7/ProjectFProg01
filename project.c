@@ -28,6 +28,92 @@ char getch(){
        return buf;
 }
 
+void PrintFullBody(){
+printf(
+    "  000\n"
+    " 0   0\n"
+    "  000\n"
+    "   |\n"
+    "   |\n"
+    "-------\n"
+    "   |\n"
+    "   |\n"
+    "  - -\n"
+    " -   -\n"
+    "-     -\n");
+}
+
+void Print1missBody(){
+    printf(
+    "  000\n"
+    " 0   0\n"
+    "  000\n"
+    "   |\n"
+    "   |\n"
+    "-------\n"
+    "   |\n"
+    "   |\n"
+    "  -  \n"
+    " -    \n"
+    "-      \n");
+}
+void Print2missBody(){
+    printf(
+    "  000\n"
+    " 0   0\n"
+    "  000\n"
+    "   |\n"
+    "   |\n"
+    "-------\n"
+    "   |\n"
+    "   |\n"
+    "     \n"
+    "      \n"
+    "       \n");
+}
+void Print3missBody(){
+    printf(
+    "  000\n"
+    " 0   0\n"
+    "  000\n"
+    "   |\n"
+    "   |\n"
+    "----\n"
+    "   |\n"
+    "   |\n"
+    "     \n"
+    "      \n"
+    "       \n");
+}
+void Print4missBody(){
+    printf(
+    "  000\n"
+    " 0   0\n"
+    "  000\n"
+    "   |\n"
+    "   |\n"
+    "   -\n"
+    "   |\n"
+    "   |\n"
+    "    \n"
+    "     \n"
+    "      \n");
+}
+void Print5missBody(){
+    printf(
+    "FFFFFFFFFFF\n"
+    "F\n"
+    "F\n"
+    "F\n"
+    "FFFFFFF\n"
+    "FFFFFFF\n"
+    "F\n"
+    "F\n"
+    "F\n"
+    "F\n"
+    ":(\n");
+}
+
 int checkAnswer(char c, char word[15]){
     int varBool = 0;//bool
     int cont = 0;
@@ -60,12 +146,7 @@ char updateChar(char word[15], char answer[15],char rep){
             //printf("\n si es %c en: ",rep);
             //printf("%d",i);
             answer[i] = rep;
-            //return answer[15];
         }
-
-        //if(answer[i]!='x')
-        //break;
-            //answer[i] = 'x';
     }
     return answer[15];
 }
@@ -108,20 +189,24 @@ int compareChar(char word[15],char answer[15]){
         }
     return varBool;
 }
-//ACTUALIZAR-COMPARAR -> IMPRIMIR
+
 int main(){
 
-    char words[15][15] = {"coronavirus","mazatlan","relampago","relojeria","delantero",
+    char words[15][15] = {
+                        "coronavirus","mazatlan","relampago","relojeria","delantero",
                           "venezuela","internacional","enamorados","regueton","lenguaje",
                           "elefante","teorema","calzones","velocidad","gravedad"};
+    
     char gameOn = 'n';
-    char wrong = 'x';
-    char ans;
+    //char wrong = 'x';
+    
+    char ans;//caracter ingresado
     char wordTemp[15]; //la palabra a adivinar
     char answTemp[15];
+    
     int mistakes = 0;
     int answer; //bool que simboliza si la respuesta fue correcta o incorrecta 
-    int indexArr = 0;
+    int indexArr = 0;// para obtener palabra random de words[][]
 
     //Introducción al juego
     printf("!Bienvenido al juego tradicional de Ahorcado!");
@@ -129,13 +214,14 @@ int main(){
                "Se elegira una palabra al azar, dicha palabra estara incompleta \n"
                "y necesitara que adivines que letras faltan, si no, !te ahogaras!\n"
                "...y dicen que es una muerte dolorosa ****\n"
-               "TIENES 6 INTENTOS\n");
+               "TIENES 5 INTENTOS\n");
     printf("Listo? (s/n) \n");
     scanf("%c",&gameOn);
     
     if(gameOn == 's'){
         srand((unsigned int)time(NULL));
         indexArr = (int)rand() % 15;
+        //PrintFullBody();
         printf(" * La palabra es mas o menos asi: \n");
         ans = 0;
         mistakes = 0;
@@ -150,22 +236,40 @@ int main(){
     }
     while(gameOn == 's'){
         //Funcionamiento del juego
-
+            switch(mistakes){
+        case 0:
+            PrintFullBody();
+            break;
+        case 1:
+            Print1missBody();
+            break;
+        case 2: 
+            Print2missBody();
+            break;
+        case 3:
+            Print3missBody();
+            break;
+        case 4:
+            Print4missBody();
+            break;
+        case 5: 
+            Print5missBody();
+            break;
+    }
 
         //para checar la palabra
         printCorrectAns(answTemp);
+        printf("\n¿Cual letra crees que es parte de la palabra?\n");
         
+        scanf("%c",&ans);
         //comparacion de cadenas recurrente
         if (compareChar(wordTemp,answTemp) == 0){
             
             printf("\n Felicidades, te salvaste... por ahora.\n");
-            mistakes = 6; //para ir al game over            
+            mistakes = 5; //para ir al game over            
         }
 
-        printf("\n¿Cual letra crees que es parte de la palabra?\n");
-        scanf("%c",&ans);
-
-        if(mistakes < 6){
+        if(mistakes < 5){
             int check;
             scanf("%c",&ans);
             check = checkAnswer(ans,wordTemp);
@@ -179,14 +283,19 @@ int main(){
             else                
                 printf("\n Errores : %d \n",mistakes);        
         }
-        if (mistakes == 6){
+        if (mistakes == 5){
             //G A M E   O V E R
-            printf("\n\n¿Quieres volver a jugar?(s/n)\n");
-            scanf("%c",&gameOn);
+            //if (gameOn == 'n')
+            //{
+                Print5missBody();
+                printf("\n\n¿Quieres volver a jugar?(s/n)\n");
+                scanf("%s",&gameOn);
+            //}
             //getch();
             if(gameOn == 's'){
                 srand((unsigned int)time(NULL));
                 indexArr = (int)rand() % 15;
+                //PrintFullBody();
                 printf(" * La palabra es mas o menos asi: \n");
                 ans = 0;
                 mistakes = 0;
